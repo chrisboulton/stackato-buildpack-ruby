@@ -60,6 +60,13 @@ function create_asset_plugin {
     echo "Rails.application.config.serve_static_assets = true" > $PLUGIN_DIR/init.rb
 }
 
+function compile_rails_assets {
+  set +e bundle exec rake assets:precompile --dry-run 2> /dev/null
+  if [ $? -eq 0 ]; then
+    puts-step "Compiling assets"
+    bundle exec rake assets:precompile 2>&1
+  fi
+}
 
 cd $BUILD_DIR
 
@@ -75,6 +82,7 @@ write_database_yml
 write_boot_config
 db_migrate
 create_asset_plugin
+compile_rails_assets
 
 
 # Store new artifacts in cache.
