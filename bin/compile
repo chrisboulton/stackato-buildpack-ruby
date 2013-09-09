@@ -18,6 +18,10 @@ CACHED_DIRS="rubygems"
 
 mkdir -p $CACHE_DIR
 
+if [ -z "$BUNDLE_WITHOUT" ]; then
+    BUNDLE_WITHOUT="development:test"
+fi
+
 # Syntax sugar.
 indent() {
   RE="s/^/       /"
@@ -31,7 +35,7 @@ function puts-step (){
 function bundle_install {
     unset RUBYOPT BUNDLE_BIN_PATH GEM_PATH GEM_HOME BUNDLE_GEMFILE
     puts-step "Installing gem dependencies"
-    bundle install --path rubygems 2>&1 | indent
+    bundle install --without ${BUNDLE_WITHOUT} --binstubs --path rubygems 2>&1 | indent
 }
 
 function write_database_yml {
