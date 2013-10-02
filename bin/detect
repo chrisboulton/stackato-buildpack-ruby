@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # bin/use <build-dir>
 
-if [ -f $1/config/environment.rb ]; then
-  echo "Ruby/Rails" && exit 0
+if [ -f "$1/config/database.yml" ] && [ -f "$1/config/boot.rb" ]; then
+  echo "Ruby/Rails-Compatible" && exit 0
 else
   echo "no" && exit 1
 fi
