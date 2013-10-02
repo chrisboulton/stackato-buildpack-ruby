@@ -55,14 +55,15 @@ function db_migrate {
 
 function create_asset_plugin {
     puts-step "Enabling static assets plugin"
-    PLUGIN_DIR=$BUILD_DIR/plugins/serve_static_assets
-    mkdir -p $PLUGIN_DIR
-    echo "Rails.application.config.serve_static_assets = true" > $PLUGIN_DIR/init.rb
+    INITIALIZER_DIR="$BUILD_DIR/config/initializers"
+    mkdir -p "$INITIALIZER_DIR"
+    echo "Rails.application.config.serve_static_assets = true" > "$INITIALIZER_DIR/stackato_serve_static_assets.rb"
 }
 
 function compile_rails_assets {
-  set +e bundle exec rake assets:precompile --dry-run 2> /dev/null
-  if [ $? -eq 0 ]; then
+  # Not sure how else to detect a rake task is actually present.
+  if [ $(bundle exec rake -T | grep -c "^rake assets:precompile") -gt 0 ]; then
+    create_asset_plugin
     puts-step "Compiling assets"
     bundle exec rake assets:precompile 2>&1
   fi
