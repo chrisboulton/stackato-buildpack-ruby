@@ -17,5 +17,5 @@ EOF
 cat <<EOF
 
 default_process_types:
-  web:      bundle exec rails server
+  web:      bundle exec rackup
 EOF
